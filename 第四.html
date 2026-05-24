@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>丁振宇 Ricardo | 游戏市场营销与内容运营策划官网</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0d11;
+            --text-primary: #ffffff;
+            --text-secondary: #8a99ad;
+            --accent-color: #ff5722;
+            --accent-glow: rgba(255, 87, 34, 0.4);
+            --accent-green: #00ffa3;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --font-sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Syne', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
+        body { background-color: var(--bg-color); color: var(--text-primary); font-family: var(--font-sans); overflow-x: hidden; }
+
+        /* 液态流体背景动效 */
+        .liquid-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; filter: blur(140px); opacity: 0.45; pointer-events: none; }
+        .blob { position: absolute; border-radius: 50%; animation: float 20s infinite alternate ease-in-out; }
+        .blob1 { width: 450px; height: 450px; background: linear-gradient(45deg, var(--accent-color), #7928ca); top: -10%; left: -5%; }
+        .blob2 { width: 550px; height: 550px; background: linear-gradient(135deg, #0070f3, var(--accent-green)); bottom: -10%; right: -5%; animation-duration: 25s; }
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(80px, 60px) scale(1.1); } }
+
+        /* 导航栏 */
+        header { position: fixed; top: 0; left: 0; width: 100%; padding: 25px 6%; display: flex; justify-content: space-between; align-items: center; z-index: 100; transition: all 0.3s ease; }
+        header.sticky { background: rgba(11, 13, 17, 0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); padding: 15px 6%; }
+        .logo { font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; text-decoration: none; color: white; letter-spacing: -0.5px; }
+        .logo span { color: var(--accent-color); }
+        nav { display: flex; gap: 35px; }
+        nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.3s; position: relative; }
+        nav a:hover, nav a.active { color: white; }
+
+        /* 通用布局 */
+        section { padding: 120px 6% 60px 6%; max-width: 1440px; margin: 0 auto; }
+        .section-header { margin-bottom: 50px; border-bottom: 1px solid var(--glass-border); padding-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .section-title { font-family: var(--font-display); font-size: 2.5rem; text-transform: uppercase; }
+        .section-title span { color: var(--accent-color); }
+        .section-tag { color: var(--text-secondary); font-size: 0.85rem; letter-spacing: 2px; }
+
+        /* ================= 1. HERO SECTION ================= */
+        .hero-section { min-height: 95vh; display: grid; grid-template-columns: 1.2fr 1fr; gap: 50px; align-items: center; padding-top: 140px; position: relative; }
+        .hero-content { max-width: 680px; z-index: 5; }
+        
+        .hero-identity { margin-bottom: 30px; }
+        .hero-identity h1 { font-family: var(--font-display); font-size: 3.8rem; line-height: 1; letter-spacing: -1px; margin-bottom: 12px; }
+        .hero-identity p { color: var(--accent-color); font-weight: 700; font-size: 1.1rem; letter-spacing: 2px; text-transform: uppercase; }
+        
+        .value-proposition { font-size: 1.5rem; line-height: 1.5; font-weight: 500; color: white; margin-bottom: 45px; }
+        .value-proposition em { font-style: normal; color: transparent; -webkit-background-clip: text; background-image: linear-gradient(90deg, #fff, var(--text-secondary)); }
+        
+        .resume-btn-container { position: relative; display: inline-block; }
+        .btn-premium { 
+            position: relative; background: #ffffff; color: #0b0d11; font-weight: 700; font-size: 1rem; 
+            padding: 18px 38px; border: none; border-radius: 12px; cursor: pointer; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 4px 15px rgba(255,255,255,0.1); overflow: hidden;
+        }
+        .btn-premium svg { transition: transform 0.3s ease; }
+        .btn-premium::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent); transition: 0.6s;
+        }
+        .btn-premium:hover { 
+            background: var(--accent-color); color: #ffffff; transform: translateY(-3px); 
+            box-shadow: 0 12px 28px var(--accent-glow), 0 4px 10px rgba(255, 87, 34, 0.2); 
+        }
+        .btn-premium:hover::before { left: 100%; }
+        .btn-premium:hover svg { transform: translateX(3px) scale(1.1); }
+
+        /* 纯粹融入背景的无框猫咪区域 */
+        .hero-right-zone { display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; height: 500px; position: relative; }
+        .portrait-showcase { width: 100%; max-width: 380px; height: 420px; background: linear-gradient(180deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.04) 100%); border: 1px solid var(--glass-border); border-radius: 24px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 0.9rem; overflow: hidden; backdrop-filter: blur(10px); box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+
+        .pet-canvas-free { position: absolute; bottom: -20px; left: 0; display: flex; align-items: flex-end; gap: 14px; height: 120px; z-index: 10; }
+        .pet { width: 60px; height: 75px; background: #13161d; border-radius: 25px 25px 8px 8px; position: relative; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid rgba(255,255,255,0.05); }
+        .pet:hover { height: 50px; transform: translateY(12px); background: #1b1e26; }
+        .pet-1 { height: 90px; background: #0e1117; }
+        .pet-2 { height: 110px; background: #1e222b; }
+        .pet-3 { height: 80px; background: var(--accent-color); }
+        .pet::before, .pet::after { content: ''; position: absolute; top: -6px; border-left: 9px solid transparent; border-right: 9px solid transparent; }
+        .pet::before { left: 4px; border-bottom: 12px solid currentColor; color: inherit; transform: rotate(-10deg); }
+        .pet::after { right: 4px; border-bottom: 12px solid currentColor; color: inherit; transform: rotate(10deg); }
+        .pet-1::before, .pet-1::after { color: #0e1117; }
+        .pet-2::before, .pet-2::after { color: #1e222b; }
+        .pet-3::before, .pet-3::after { color: var(--accent-color); }
+        .eyes { display: flex; justify-content: space-between; width: 36px; position: absolute; top: 22px; left: 50%; transform: translateX(-50%); }
+        .eye { width: 14px; height: 14px; background: white; border-radius: 50%; position: relative; display: flex; align-items: center; justify-content: center; }
+        .pupil { width: 7px; height: 7px; background: #0b0d11; border-radius: 50%; position: absolute; }
+        .pet-3 .eye { background: #0b0d11; }
+        .pet-3 .pupil { background: var(--accent-green); }
+
+        @media (max-width: 968px) {
+            .hero-section { grid-template-columns: 1fr; text-align: center; padding-top: 100px; gap: 40px; }
+            .hero-right-zone { align-items: center; height: auto; gap: 30px; }
+            .portrait-showcase { height: 350px; width: 100%; }
+            .pet-canvas-free { position: relative; bottom: 0; left: 0; justify-content: center; width: 100%; }
+        }
+
+        /* ================= 2. PROOF STRIP ================= */
+        .proof-strip { background: rgba(255, 255, 255, 0.01); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); padding: 30px 6%; }
+        .proof-wrapper { max-width: 1440px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 30px; }
+        .proof-item { display: flex; flex-direction: column; }
+        .proof-label { font-size: 0.8rem; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 1.5px; margin-bottom: 6px; }
+        .proof-value { font-family: var(--font-display); font-size: 1.6rem; color: white; }
+        .proof-value span { color: var(--accent-color); }
+        @media (max-width: 768px) { .proof-wrapper { grid-template-columns: 1fr; display: grid; } }
+
+        /* ================= 3. FEATURED RESULTS (0.3s极速手绘可视化组件) ================= */
+        .results-grid { display: flex; flex-direction: column; gap: 55px; }
+        .result-container { display: flex; flex-direction: column; gap: 16px; }
+        .result-card { background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(20px); border-radius: 24px; padding: 40px; display: grid; grid-template-columns: 1fr 1.3fr; gap: 40px; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative; }
+        .result-card:hover { border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.04); }
+        
+        .result-left { display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid rgba(255,255,255,0.05); padding-right: 20px; }
+        .result-meta { color: var(--accent-color); font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+        .result-title { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 15px; line-height: 1.2; }
+        .result-stats-box { background: rgba(0, 255, 163, 0.02); border: 1px solid rgba(0, 255, 163, 0.08); border-radius: 16px; padding: 20px; margin-top: 15px; }
+        .result-stats-num { font-family: var(--font-display); font-size: 2.2rem; color: var(--accent-green); line-height: 1; }
+        .result-stats-lbl { font-size: 0.8rem; color: var(--text-secondary); margin-top: 5px; }
+        
+        .result-right { display: flex; flex-direction: column; gap: 20px; justify-content: center; }
+        .cr-item { display: flex; flex-direction: column; gap: 4px; }
+        .cr-label { font-size: 0.8rem; text-transform: uppercase; color: var(--text-secondary); font-weight: 600; letter-spacing: 0.5px; }
+        .cr-desc { font-size: 0.95rem; color: rgba(255,255,255,0.9); line-height: 1.6; }
+
+        /* 0.3秒闪速弹出卡片 */
+        .pop-cards-container {
+            max-height: 0; overflow: hidden; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); opacity: 0; transform: translateY(10px);
+        }
+        .pop-cards-container.active { max-height: 250px; opacity: 1; padding-top: 8px; transform: translateY(0); }
+        .pop-card { background: rgba(14, 18, 24, 0.9); border: 1px dashed rgba(255,255,255,0.15); border-radius: 16px; padding: 20px; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 140px; backdrop-filter: blur(15px); }
+        
+        /* 手绘组件基础样式 */
+        .chart-preview-box { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; }
+        .chart-mini-title { font-size: 0.75rem !important; text-transform: uppercase; color: var(--accent-color) !important; font-weight: 600; margin-bottom: 4px; letter-spacing: 1px; }
+        .mini-dashboard { width: 100%; flex: 1; display: flex; align-items: flex-end; gap: 6px; padding-top: 15px; }
+        .dashboard-bar { flex: 1; background: linear-gradient(180deg, var(--accent-green) 0%, rgba(0, 255, 163, 0.1) 100%); border-radius: 3px 3px 0 0; height: 0; position: relative; }
+        .pop-cards-container.active .dashboard-bar { animation: barGrow 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .dashboard-bar::after { content: attr(data-val); position: absolute; top: -14px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; color: var(--text-secondary); }
+        @keyframes barGrow { from { height: 0; } to { height: var(--h); } }
+
+        .mini-mindmap { width: 100%; flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 6px; padding-left: 2px; margin-top: 6px; }
+        .mind-node { font-size: 0.7rem; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); padding: 3px 6px; border-radius: 4px; color: #e2e8f0; display: flex; align-items: center; gap: 4px; width: 100%; text-align: left; position: relative; }
+        .mind-node::before { content: ''; width: 4px; height: 4px; background: var(--accent-color); border-radius: 50%; shrink: 0; }
+
+        .kv-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: linear-gradient(135deg, #161b26 0%, #0d1117 100%); border-radius: 12px; }
+        .kv-placeholder svg { color: rgba(255,255,255,0.2); margin-bottom: 6px; }
+
+        @media (max-width: 868px) {
+            .result-card { grid-template-columns: 1fr; gap: 30px; padding: 30px; }
+            .result-left { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05); padding-right: 0; padding-bottom: 20px; }
+            .pop-cards-container.active { max-height: 600px; grid-template-columns: 1fr; }
+        }
+
+        /* ================= 4. EXPERIENCE SECTION ================= */
+        .exp-container { display: flex; flex-direction: column; gap: 16px; }
+        .exp-row { background: rgba(255,255,255,0.01); border: 1px solid var(--glass-border); border-radius: 16px; padding: 25px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .exp-company { font-family: var(--font-display); font-size: 1.3rem; width: 30%; }
+        .exp-role { font-size: 1rem; color: white; width: 45%; }
+        .exp-time { text-align: right; color: var(--text-secondary); font-size: 0.95rem; width: 25%; }
+        @media (max-width: 768px) { .exp-row { flex-direction: column; align-items: flex-start; gap: 8px; } .exp-company, .exp-role, .exp-time { width: 100%; text-align: left; } }
+
+        /* ================= 5. ABOUT SECTION ================= */
+        .about-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 60px; }
+        .about-text { font-size: 1.15rem; line-height: 1.7; color: var(--text-secondary); }
+        .skills-subgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .skill-box { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 25px; border-radius: 16px; }
+        .skill-box h4 { font-family: var(--font-display); font-size: 1.05rem; margin-bottom: 15px; color: white; display: flex; align-items: center; gap: 8px; }
+        .skill-box h4::before { content: ''; width: 6px; height: 6px; background: var(--accent-color); border-radius: 50%; }
+        .skill-list { display: flex; flex-wrap: wrap; gap: 8px; }
+        .skill-badge { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 50px; font-size: 0.85rem; color: var(--text-secondary); }
+        @media (max-width: 968px) { .about-layout { grid-template-columns: 1fr; gap: 40px; } .skills-subgrid { grid-template-columns: 1fr; } }
+
+        /* ================= 6. CONTACT SECTION ================= */
+        .contact-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 50px; }
+        .contact-meta-info { display: flex; flex-direction: column; gap: 25px; }
+        .c-item h5 { font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 1px; margin-bottom: 5px; }
+        .c-item p, .c-item a { font-size: 1.2rem; color: white; text-decoration: none; }
+        .c-item a:hover { color: var(--accent-color); }
+        
+        form { display: flex; flex-direction: column; gap: 18px; }
+        .form-group { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        input, textarea { background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); padding: 16px; border-radius: 12px; color: white; font-family: var(--font-sans); font-size: 0.95rem; transition: border 0.3s; width: 100%; }
+        input:focus, textarea:focus { outline: none; border-color: var(--accent-color); }
+        .btn-submit { background: white; color: var(--bg-color); border: none; padding: 16px 35px; border-radius: 50px; font-weight: 700; cursor: pointer; align-self: flex-start; transition: all 0.3s; }
+        .btn-submit:hover { background: var(--accent-color); color: white; transform: translateY(-2px); }
+
+        /* ================= 全屏双舱交互式真实简历浏览器 ================= */
+        .resume-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(7,9,13,0.5); backdrop-filter: blur(15px); z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
+        .resume-overlay.open { opacity: 1; pointer-events: auto; }
+        
+        .resume-aside-panel { position: fixed; top: 0; right: -100%; width: 85%; max-width: 1100px; height: 100vh; background: #0f121a; border-left: 1px solid var(--glass-border); z-index: 1001; display: grid; grid-template-columns: 1fr 280px; transition: right 0.5s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: -20px 0 60px rgba(0,0,0,0.7); }
+        .resume-overlay.open .resume-aside-panel { right: 0; }
+        
+        .panel-main-view { padding: 45px; overflow-y: auto; background: #131722; }
+        .pdf-page-mock { background: #ffffff; color: #1e293b; padding: 50px 60px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); max-width: 800px; margin: 0 auto; font-family: -apple-system, sans-serif; }
+        .pdf-header { border-bottom: 2px solid #0f172a; padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .pdf-name h2 { font-size: 2.2rem; font-weight: 800; color: #0f172a; }
+        .pdf-name p { color: var(--accent-color); font-weight: 700; margin-top: 4px; font-size: 1rem; }
+        .pdf-meta-right { text-align: right; font-size: 0.9rem; color: #475569; line-height: 1.5; }
+        .pdf-block { margin-top: 25px; }
+        .pdf-block h3 { font-size: 1.1rem; text-transform: uppercase; color: #0f172a; border-left: 4px solid var(--accent-color); padding-left: 10px; margin-bottom: 15px; font-weight: 700; }
+        .pdf-block p { font-size: 0.95rem; line-height: 1.6; color: #334155; text-align: justify; }
+        .pdf-exp-item { margin-bottom: 20px; }
+        .pdf-exp-title { display: flex; justify-content: space-between; font-weight: 700; color: #0f172a; margin-bottom: 6px; font-size: 0.95rem; }
+        .pdf-exp-title span { color: #64748b; font-weight: 400; }
+        
+        .panel-control-sidebar { background: #0f121a; padding: 40px 25px; border-left: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; justify-content: space-between; }
+        .control-top h4 { font-family: var(--font-display); font-size: 1.1rem; margin-bottom: 25px; letter-spacing: 0.5px; }
+        .action-card { background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: 12px; padding: 18px; margin-bottom: 15px; }
+        .action-card p { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4; }
+        .sidebar-btn { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); color: white; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .sidebar-btn:hover { background: white; color: #0b0d11; }
+        .sidebar-btn.btn-accent-active { background: var(--accent-color); border-color: var(--accent-color); color: white; }
+        .sidebar-btn.btn-accent-active:hover { background: #e04818; color: white; }
+        .close-panel-btn { background: none; border: none; color: var(--text-secondary); font-size: 1.8rem; cursor: pointer; transition: color 0.3s; align-self: flex-start; margin-bottom: 30px; }
+        .close-panel-btn:hover { color: white; }
+
+        @media (max-width: 1024px) { .resume-aside-panel { grid-template-columns: 1fr; width: 100%; } .panel-control-sidebar { display: none; } }
+        footer { border-top: 1px solid var(--glass-border); padding: 40px 6%; max-width: 1440px; margin: 0 auto; display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-secondary); }
+
+       /* 升级版：实现图片内角与外框像素级几何配合 */
+.portrait-container-fixed {
+    width: 100%;
+    max-width: 380px;
+    height: 440px; 
+    background: linear-gradient(180deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.03) 100%);
+    
+    /* 核心外框圆角 */
+    border: 1px solid var(--glass-border);
+    border-radius: 24px; /* 维持外框的大圆角 */
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* 1. 核心修改：改为 overflow: hidden。这像一个磨砂玻璃模具，会强制把突出来的图片角“切”掉。*/
+    overflow: hidden; 
+    
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    position: relative;
+    
+    /* 2. 核心修改：将 padding 改为 0（或者非常小，如4px）。因为我们要让图片角贴合外框角，内边距太大，图片圆角就不会在视觉上跟外框圆角“配合”了。*/
+    padding: 0px; 
+}
+
+.portrait-container-fixed img {
+    width: 100%;
+    height: 100%;
+    
+    /* 核心修改： object-fit 改为 cover。因为我们要裁切圆角，就必须让图片填充整个格子，不能留空白 contain 模式会留白，导致圆角切不到图片上。 */
+    object-fit: cover; 
+    
+    /* 3. 核心修改：让图片本身也继承一个稍微小一点的圆角。这就是几何对齐的奥秘。 */
+    border-radius: 20px; /* 20px (内角) < 24px (外角)，视觉上才是几何对齐的 */
+    
+    animation: portraitSmoothFade 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes portraitSmoothFade {
+    from { opacity: 0; transform: scale(1.02); } /* 稍微改小起始缩放，让它有一个从稍微大一点点缩小贴合圆角的仪式感 */
+    to { opacity: 1; transform: scale(1); }
+}
+    </style>
+</head>
+<body>
+
+    <div class="liquid-bg"><div class="blob blob1"></div><div class="blob blob2"></div></div>
+
+    <header id="header">
+        <a href="#" class="logo">RICARDO<span>.</span></a>
+        <nav>
+            <a href="#results" class="nav-link">精选成果</a>
+            <a href="#experience" class="nav-link">项目履历</a>
+            <a href="#about" class="nav-link">关于我</a>
+            <a href="#contact" class="nav-link">联络</a>
+        </nav>
+    </header>
+
+    <section class="hero-section" id="hero">
+        <div class="hero-content">
+            <div class="hero-identity">
+                <h1>丁振宇 Ricardo</h1>
+                <p>游戏市场营销 / 内容运营策划</p>
+            </div>
+            <div class="value-proposition">
+                <em>“用好奇心探索世界，以内容连接灵魂”</em>
+            </div>
+            <div class="resume-btn-container">
+                <button class="btn-premium" id="triggerOpenResume">
+                    获取完整简历
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="hero-right-zone">
+            <div class="portrait-container-fixed">
+                <img src="https://raw.githubusercontent.com/WDNMDSKL/rpc-img/main/img/ricardo.jpg" alt="丁振宇 Ricardo">
+            </div>
+        
+            <div class="pet-canvas-free">
+                <div class="pet pet-1"><div class="eyes"><div class="eye"><div class="pupil"></div></div><div class="eye"><div class="pupil"></div></div></div></div>
+                <div class="pet pet-2"><div class="eyes"><div class="eye"><div class="pupil"></div></div><div class="eye"><div class="pupil"></div></div></div></div>
+                <div class="pet pet-3"><div class="eyes"><div class="eye"><div class="pupil"></div></div><div class="eye"><div class="pupil"></div></div></div></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="proof-strip">
+        <div class="proof-wrapper">
+            <div class="proof-item">
+                <span class="proof-label">经验与背景 / Experience</span>
+                <span class="proof-value">2年+ <span>大厂S级IP</span></span>
+            </div>
+            <div class="proof-item">
+                <span class="proof-label">高光成果 / Peak Result</span>
+                <span class="proof-value">2.7亿+<span>总曝光</span> / 413W+<span>播放</span></span>
+            </div>
+            <div class="proof-item">
+                <span class="proof-label">服务客户 / Track Record</span>
+                <span class="proof-value">腾讯 · 网易 · 育碧 · EA</span>
+            </div>
+            <div class="proof-item">
+                <span class="proof-label">常驻城市 / Location</span>
+                <span class="proof-value">中国 · 上海</span>
+            </div>
+        </div>
+    </div>
+
+    <section id="results">
+        <div class="section-header">
+            <h2 class="section-title">Featured <span>Results</span></h2>
+            <div class="section-tag">01 / CASE STUDIES</div>
+        </div>
+        <div class="results-grid">
+            
+            <div class="result-container exp-interact-group" data-target="pop-cod">
+                <div class="result-card">
+                    <div class="result-left">
+                        <div>
+                            <div class="result-meta">腾讯游戏 / 使命召唤手游</div>
+                            <h3 class="result-title">蛇年春节线下活动内容营销</h3>
+                        </div>
+                        <div class="result-stats-box">
+                            <div class="result-stats-num">2.7亿+</div>
+                            <div class="result-stats-lbl">内容总曝光量</div>
+                        </div>
+                    </div>
+                    <div class="result-right">
+                        <div class="cr-item">
+                            <span class="cr-label">Context（背景）</span>
+                            <p class="cr-desc">春节节点面临端内MP/BR玩法无重大更新痛点，可借端内“赛博长沙夜市”跳跳乐娱乐玩法外延，打造城市文旅大事件——“吉时召唤，吉市湘见”。</p>
+                        </div>
+                        <div class="cr-item">
+                            <span class="cr-label">Ownership (核心职责)</span>
+                            <p class="cr-desc">主导全案内容矩阵排期与全链路落地。锁定B站、抖音高重叠度泛娱乐与整活向达人（如李维刚、小罗恶搞），统筹剧情整活内容，精准击穿双平台泛玩家生态。文旅案中拉通长沙大悦城及本土头部异业（文和友、茶颜悦色等），主策划1:1还原游戏‘赛博长沙’地图的线下霓虹庙会、破次元快闪店及‘使命占卜/真人贪吃蛇’通关互动；通过‘集使卡’H5机制驱动玩家线下带话题打卡、UGC扩散，并联动KOL产出‘一日店长打工日记’Vlog，实现线上引流与线下体验的破圈闭环。</p>
+                        </div>
+                        <div class="cr-item">
+                            <span class="cr-label">Result (量化结果)</span>
+                            <p class="cr-desc">长沙文旅案狂揽2.7亿+总曝光、1130W+总互动；控制整体CPC低至0.006；互动成本约为0.15。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pop-cards-container" id="pop-cod" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: stretch; width: 100%;">
+                    
+                    <div class="pop-card" style="padding: 12px; background: rgba(14, 18, 24, 0.9); display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 16px; height: 140px; box-sizing: border-box;">
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 10px;">
+                            <img src="https://raw.githubusercontent.com/WDNMDSKL/rpc-img/main/img/大悦城.jpg" 
+                                 alt="CODM春节长沙大悦城联动KV" 
+                                 style="width: 100%; height: 100%; object-fit: contain; transform: scale(1.05);">
+                        </div>
+                    </div>
+                    
+                    <div class="pop-card" style="height: 140px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center;">
+                        <div class="chart-preview-box">
+                            <div class="chart-mini-title">CODM新春营销数据</div>
+                            <div class="mini-dashboard" style="padding-top: 5px;">
+                                <div class="dashboard-bar" style="--h: 60%;" data-val="1130万+"></div>
+                                <div class="dashboard-bar" style="--h: 90%;" data-val="2.7亿"></div>
+                                <div class="dashboard-bar" style="--h: 25%; background:var(--accent-color)" data-val="0.006"></div>
+                            </div>
+                            <p style="font-size:0.55rem; color:var(--text-secondary); margin-top:4px; line-height:1.1;">柱1:新春内容总互动量 / 柱2:总曝光量 / 柱3:平均CPC</p>
+                        </div>
+                    </div>
+                    
+                    <div class="pop-card" style="height: 140px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center;">
+                        <div class="chart-preview-box" style="justify-content: flex-start;">
+                            <div class="chart-mini-title" style="margin-bottom:4px;">全周期整合宣发链路脑图</div>
+                            <div class="mini-mindmap" style="margin-top: 2px; gap: 4px;">
+                                <div class="mind-node">预热期：聚焦端内爆料与异业官宣，拉高跨界期待</div>
+                                <div class="mind-node">统筹高颜值COS与达人整活事件，引爆全网声量</div>
+                                <div class="mind-node">长尾产出KOL生态打卡与店长回顾Vlog</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="result-container exp-interact-group" data-target="pop-bf">
+                    <div class="result-card">
+                        <div class="result-left">
+                            <div>
+                                <div class="result-meta">育碧 & EA 业务</div>
+                                <h3 class="result-title">海外3A大作内容主策</h3>
+                            </div>
+                            <div class="result-stats-box">
+                                <div class="result-stats-num">413W+</div>
+                                <div class="result-stats-lbl">小红书独立话题总播放量</div>
+                            </div>
+                        </div>
+                        <div class="result-right">
+                            <div class="cr-item">
+                                <span class="cr-label">Context (背景)</span>
+                                <p class="cr-desc">负责《战地风云》《彩虹六号》《刺客信条》等多款海外3A级别产品在重大节点与大版本（DLC）更新时的本地化与曝光。</p>
+                            </div>
+                            <div class="cr-item">
+                                <span class="cr-label">Ownership (核心职责)</span>
+                                <p class="cr-desc">把控新媒体大节点内容发布排期。纵向打通业务侧、设计侧与IT侧研发，对所有长图、版本公告执行极严苛的宣发合规监修，精细化管理数千条UGC内容链。</p>
+                            </div>
+                            <div class="cr-item">
+                                <span class="cr-label">Result (量化结果)</span>
+                                <p class="cr-desc">成功主导宣发流。内容频频打破圈层，独立策划的小红书爆款原生话题斩获413W+播放量，大幅提升单机大作的本土玩家社区粘性。</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pop-cards-container" id="pop-bf" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: stretch; width: 100%;">
+                        
+                        <div class="pop-card" style="padding: 12px; background: rgba(14, 18, 24, 0.9); display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 16px; height: 140px; box-sizing: border-box;">
+                            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 10px;">
+                                <img src="https://raw.githubusercontent.com/WDNMDSKL/rpc-img/main/img/Art.jpg" 
+                                     alt="刺客信条官方KV" 
+                                     style="width: 100%; height: 100%; object-fit: contain; transform: scale(1.05);">
+                            </div>
+                        </div>
+                        
+                        <div class="pop-card" style="height: 140px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center;">
+                            <div class="chart-preview-box">
+                                <div class="chart-mini-title">平台舆情及曝光监控</div>
+                                <div class="mini-dashboard" style="padding-top: 5px;">
+                                    <div class="dashboard-bar" style="--h: 30%;" data-val="150W"></div>
+                                    <div class="dashboard-bar" style="--h: 85%;" data-val="413W"></div>
+                                    <div class="dashboard-bar" style="--h: 60%; background:#7928ca" data-val="High"></div>
+                                </div>
+                                <p style="font-size:0.55rem; color:var(--text-secondary); margin-top:4px; line-height:1.1;">柱1:日常话题度 / 柱2:爆款热度 / 柱3:社区粘性</p>
+                            </div>
+                        </div>
+                        
+                        <div class="pop-card" style="height: 140px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center;">
+                            <div class="chart-preview-box" style="justify-content: flex-start;">
+                                <div class="chart-mini-title" style="margin-bottom:4px;">重大节点宣发排期链</div>
+                                <div class="mini-mindmap" style="margin-top: 2px; gap: 4px;">
+                                    <div class="mind-node">海外版本DLC更新节点本地化对齐</div>
+                                    <div class="mind-node">拉通文案/美术/H5侧跨部门排期</div>
+                                    <div class="mind-node">大厂级别海外(EA/育碧)合规性审查</div>
+                                </div>
+                            </div>
+                        </div>
+    
+                    </div>
+                </div>
+    </section>
+
+    <section id="experience">
+        <div class="section-header">
+            <h2 class="section-title">Project <span>Experience</span></h2>
+            <div class="section-tag">02 / TIME TRACK</div>
+        </div>
+        <div class="exp-container">
+            <div class="exp-row">
+                <div class="exp-company">上海索来文化传播有限公司</div>
+                <div class="exp-role">育碧 (UBISOFT) & EA 官方社媒内容主策</div>
+                <div class="exp-time">2025.04 - 至今</div>
+            </div>
+            <div class="exp-row">
+                <div class="exp-company">上海脉奥公关顾问有限公司</div>
+                <div class="exp-role">网易游戏项目组 - 《永劫无间手游》&《倩女幽魂》等内容宣发</div>
+                <div class="exp-time">2024.01 - 2024.09</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="section-header">
+            <h2 class="section-title">About <span>Ricardo</span></h2>
+            <div class="section-tag">03 / SKILLS MATRIX</div>
+        </div>
+        <div class="about-layout">
+            <div class="about-text">
+                <p style="margin-bottom: 20px;">
+                    正是因为对世界与技术怀揣着不竭的好奇心，我乐于不断打破边界、拓展自己的能力——从 Adobe 全家桶与独立的音效设计，到运用网络爬虫自发抓取玩家舆情，再到调用 GPT/Gemini 的 API 接口部署本地化 AI 工作流。这些技能不是冰冷的工具，而是我探索市场的武器。
+                </p>
+                <p>
+                    在今天的存量竞争中，空洞的营销文案已无法打动人心，当代玩家比任何时候都更需要情感的慰藉与情绪的释放。我希望用真正优秀、有温度的内容，把玩家散落的‘热爱’重新集中在一起。
+                </p>
+            </div>
+            <div class="skills-subgrid">
+                <div class="skill-box">
+                    <h4>策略运营与大厂统筹</h4>
+                    <div class="skill-list">
+                        <span class="skill-badge">合规监修</span>
+                        <span class="skill-badge">PGC创意</span>
+                        <span class="skill-badge">KOL/MCN管理</span>
+                        <span class="skill-badge">买量转化</span>
+                        <span class="skill-badge">线下项目协同</span>
+                    </div>
+                </div>
+                <div class="skill-box">
+                    <h4>数据技术与全栈交付</h4>
+                    <div class="skill-list">
+                        <span class="skill-badge">Python舆情爬虫</span>
+                        <span class="skill-badge">LLM API本地部署</span>
+                        <span class="skill-badge">自动化脚本</span>
+                        <span class="skill-badge">音频重混音设计</span>
+                        <span class="skill-badge">日常英语交流</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="section-header">
+            <h2 class="section-title">Let's <span>Connect</span></h2>
+            <div class="section-tag">04 / TALK TO ME</div>
+        </div>
+        <div class="contact-layout">
+            <div class="contact-meta-info">
+                <div class="c-item"><h5>Email</h5><a href="mailto:Ricardo1388263@outlook.com">Ricardo1388263@outlook.com</a></div>
+                <div class="c-item"><h5>WeChat / Phone</h5><p>138 1967 8263</p></div>
+                <div class="c-item"><h5>Base Location</h5><p>中国 · 上海 (Shanghai)</p></div>
+            </div>
+            <div class="contact-form-box">
+                <form onsubmit="alert('信息已成功发送！Ricardo会立刻通过邮件或微信与您取得联络。'); return false;">
+                    <div class="form-group">
+                        <input type="text" placeholder="您的姓名 / 公司" required>
+                        <input type="email" placeholder="您的联络邮箱" required>
+                    </div>
+                    <input type="text" placeholder="意向主题 (如：大厂内推 / 营销合作 )" required>
+                    <textarea rows="4" placeholder="写下您的合作诉求或对Ricardo说的话..." required></textarea>
+                    <button type="submit" class="btn-submit">发送联络信息</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <div class="resume-overlay" id="resumeOverlay">
+        <div class="resume-aside-panel">
+            
+            <div class="panel-main-view">
+                <div class="pdf-page-mock">
+                    <div class="pdf-header">
+                        <div class="pdf-name">
+                            <h2>丁振宇 Ricardo</h2>
+                            <p>游戏市场营销 / 内容运营策划</p>
+                        </div>
+                        <div class="pdf-meta-right">
+                            手机: 13819678263<br>
+                            邮箱: Ricardo1388263@outlook.com<br>
+                            常驻: 上海
+                        </div>
+                    </div>
+                    
+                    <div class="pdf-block">
+                        <h3>个人陈述</h3>
+                        <p>2年+游戏行业市场营销与社群运营经验，熟悉从“节点曝光、商业买量”到“官方内容阵地、长线用户生态”的全周期营销活动的推进与落地。具备大厂S级IP与海外大作双重项目背景。曾作为核心团队成员深度参与并负责腾讯、网易、育碧、EA等产品社媒阵地。具备全流程 PGC内容生产/大型线下事件执行与多方协同统筹能力。</p>
+                    </div>
+
+                    <div class="pdf-block">
+                        <h3>工作经历</h3>
+                        <div class="pdf-exp-item">
+                            <div class="pdf-exp-title">上海索来文化传播有限公司 | 内容运营策划 <span>2025.04 - 至今</span></div>
+                            <p>负责育碧（UBISOFT）与EA海外硬核大作（《战地风云》、《彩虹六号》、《刺客信条》等）本土新媒体矩阵宣发。拉通内部业务侧（文案、美术、网页IT开发），主导小红书话题热度破413W+总播放量。</p>
+                        </div>
+                        <div class="pdf-exp-item">
+                            <div class="pdf-exp-title">上海脉奥公关顾问有限公司 | 腾讯游戏项目组 <span>2024.01 - 2024.09</span></div>
+                            <p>主导《使命召唤手游》莉可莉丝联动及长沙文旅多节点高爆曝光，斩获2.7亿+总曝光、买量CPC最低至0.006元。主导《暗区突围：无限》海外上线宣发，独立访客引入突破2997W+。</p>
+                        </div>
+                    </div>
+
+                    <div class="pdf-block">
+                        <h3>技术底色</h3>
+                        <p>熟练运用 Python 编写高级网络舆情爬虫，批量抓取社区玩家声音与痛点。熟练部署并调用 GPT/Gemini API 接口搭建本地自动化内容工作流。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel-control-sidebar">
+                <div class="control-top">
+                    <button class="close-panel-btn" id="triggerCloseResume">✕</button>
+                    <h4>简历控制台</h4>
+                    <div class="action-card">
+                        <p>直接下载高清PDF原件，或将纸质简历发送至打印机进行终审。</p>
+                        <button class="sidebar-btn btn-accent-active" onclick="window.print();">打印 / 保存 PDF</button>
+                    </div>
+                    <div class="action-card">
+                        <p>快速复制电话或微信，立即锁定面试排期。</p>
+                        <button class="sidebar-btn" onclick="navigator.clipboard.writeText('13819678263'); alert('电话号码已成功复制到剪贴板！');">复制联系方式</button>
+                    </div>
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-secondary); text-align: center;">Ricardo Ding © 2026</div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <div>© 2026 Ricardo Ding. 极致响应式与高交互求职个人官网.</div>
+        <div>Designed for Elite Game Marketing.</div>
+    </footer>
+
+    <script>
+        // 1. Sticky Navigation
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            header.classList.toggle('sticky', window.scrollY > 40);
+        });
+
+        // 2. 双舱交互式简历浏览器控制
+        const overlay = document.getElementById('resumeOverlay');
+        document.getElementById('triggerOpenResume').addEventListener('click', () => overlay.classList.add('open'));
+        document.getElementById('triggerCloseResume').addEventListener('click', () => overlay.classList.remove('open'));
+        overlay.addEventListener('click', (e) => { if(e.target === overlay) overlay.classList.remove('open'); });
+
+        // 3. 眼神智能追随指针算法
+        document.addEventListener('mousemove', (e) => {
+            const pupils = document.querySelectorAll('.pupil');
+            pupils.forEach(pupil => {
+                const eye = pupil.parentElement;
+                const rect = eye.getBoundingClientRect();
+                const eyeX = rect.left + rect.width / 2;
+                const eyeY = rect.top + rect.height / 2;
+                const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
+                const distance = 4;
+                pupil.style.transform = `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance}px)`;
+            });
+        });
+
+        // 4. 【像素级修复版】：成果卡片 0.3s (300ms) 闪速弹出与离境即刻消失逻辑
+        // 我们将选择器改为外层的 '.result-container'，彻底解决鼠标坐标逃逸 Bug
+        const interactContainers = document.querySelectorAll('.result-container');
+        interactContainers.forEach(container => {
+            let hoverTimer;
+            const targetId = container.getAttribute('data-target');
+            const targetContainer = document.getElementById(targetId);
+
+            // 鼠标进入整套集装箱
+            container.addEventListener('mouseenter', () => {
+                // 300ms 快速防抖触发
+                hoverTimer = setTimeout(() => {
+                    targetContainer.classList.add('active');
+                }, 300);
+            });
+
+            // 鼠标一旦离开整套集装箱的绝对边缘，小卡片瞬时随之闭合消失
+            container.addEventListener('mouseleave', () => {
+                // 1. 清除还未满 300ms 的触发定时器
+                clearTimeout(hoverTimer);
+                // 2. 即刻撤销展开状态，让 3 个小卡片瞬间消失
+                targetContainer.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
